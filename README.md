@@ -58,6 +58,7 @@ Full diagram: docs/architecture.pdf
 
 ## 6. Technical Stack
 
+
 , AI/ML Model and Framework
 * **Language:** Python 3
 * **Data:** pandas, numpy
