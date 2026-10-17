@@ -54,7 +54,11 @@ A doctor-facing dashboard shows each virtual patient's live risk, glucose trend,
                                                                             what-if twin)
 Full diagram: docs/architecture.pdf
 
-## 6. Technical Stack, AI/ML Model and Framework
+
+
+## 6. Technical Stack
+
+, AI/ML Model and Framework
 * **Language:** Python 3
 * **Data:** pandas, numpy
 * **Model:** LightGBM gradient-boosted trees (binary classifier)
@@ -81,7 +85,11 @@ Charts: `outputs/feature_importance.png`, `outputs/roc_curve.png`
 
 *Honest note: all data is synthetic and the spike behaviour comes from our simulator, so these scores demonstrate that the pipeline works end to end, not clinical accuracy. Validation on real, consented data would be required before any clinical use.*
 
+
+
 ## 7. How to Run
+
+
 ```bash
 # 1. Install dependencies
 pip install -r requirements.txt
@@ -93,7 +101,10 @@ python train_model.py
 # 3. Launch the doctor dashboard
 python -m streamlit run app.py
 
+
 ## 8. Repository Structure
+
+
 ```text
 ├── generate_data.py     # synthetic EHR + wearable/CGM data generator
 ├── train_model.py       # feature engineering, training, evaluation, ablation
@@ -103,11 +114,17 @@ python -m streamlit run app.py
 ├── outputs/             # metrics, charts, predictions
 ├── docs/                # presentation and architecture diagram (PDF)
 ├── requirements.txt
-└── LICENSEb
+└── LICENSE
 ##9. Data and Privacy
+
+
 No real patient data is used. Both streams are fully synthetic, in line with the challenge's sandbox rules (DPDP Act / HIPAA considerations).
 
+
+
 ##10. Limitations and Future Scope
+
+
 Replace synthetic data with open datasets (e.g. MIMIC-IV, public CGM datasets) and Synthea-generated records.
 
 Extend to hypertension and cardiovascular-risk twins.
@@ -116,6 +133,9 @@ Personalised models per patient; real-time streaming from consumer wearables.
 
 Clinical validation and integration with hospital EHR systems.
 
+
 11. Open-Source License
+
+
 Released under the MIT License, see LICENSE.
 
