@@ -37,6 +37,10 @@ A doctor-facing dashboard shows each virtual patient's live risk, glucose trend,
 ## 5. Architecture
 ```text
 Synthetic EHR (static) and Synthetic Wearables (CGM, HR, HRV, steps, sleep, meals) are fused into Feature Engineering (past data only: lags, trends, rolling stats). This feeds into a LightGBM Classifier (trained on unseen-patient split), which outputs a 2-hour spike risk to a Doctor Dashboard (Streamlit: risk gauge, glucose chart, explanation, what-if twin).
+Doctor dashboard
+                                                                           (Streamlit: risk gauge,
+                                                                            glucose chart, explanation,
+                                                                            what-if twin)
 ```
 Full diagram: docs/architecture.pdf
 
