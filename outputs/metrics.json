@@ -1,0 +1,41 @@
+{
+  "ablation": {
+    "EHR only": {
+      "roc_auc": 0.837,
+      "pr_auc": 0.617
+    },
+    "Wearables only": {
+      "roc_auc": 0.97,
+      "pr_auc": 0.923
+    },
+    "Fused (EHR + wearables)": {
+      "roc_auc": 0.975,
+      "pr_auc": 0.931
+    }
+  },
+  "at_threshold_0.50": {
+    "threshold": 0.5,
+    "precision": 0.867,
+    "recall": 0.812,
+    "f1": 0.839,
+    "tp": 9689,
+    "fp": 1487,
+    "fn": 2242,
+    "tn": 39702
+  },
+  "at_threshold_0.30_high_recall": {
+    "threshold": 0.3,
+    "precision": 0.78,
+    "recall": 0.89,
+    "f1": 0.831,
+    "tp": 10614,
+    "fp": 2997,
+    "fn": 1317,
+    "tn": 38192
+  },
+  "test_rows": 53120,
+  "test_patients": 40,
+  "test_positive_rate": 0.225,
+  "best_iteration": 483,
+  "note": "All data is synthetic; metrics show pipeline behaviour, not clinical accuracy."
+}
