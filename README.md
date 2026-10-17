@@ -52,6 +52,7 @@ A doctor-facing dashboard shows each virtual patient's live risk, glucose trend,
                                                                            (Streamlit: risk gauge,
                                                                             glucose chart, explanation,
                                                                             what-if twin)
+```text
 Full diagram: docs/architecture.pdf
 
 6. Technical Stack, AI/ML Model and Framework
