@@ -5,20 +5,15 @@ Submission for the Happiest Health Digital Twin Challenge 2026 (Reimagining & Re
 Diabetes care is predominantly reactive, with interventions often occurring only after a hyperglycemic event. This project presents GlucoTwin, a proof-of-concept Digital Twin for patients with Type 2 Diabetes that shifts care from reactive to proactive. The system builds a virtual patient model by fusing static Electronic Health Records (EHR) with dynamic, real-time time-series data from wearables (Continuous Glucose Monitors, heart rate, sleep, and activity). Using a LightGBM gradient-boosted classifier, the model predicts the likelihood of a glucose spike (>180 mg/dL) up to two hours in advance. Evaluated on 40 unseen synthetic patients, the fused model achieved a ROC-AUC of 0.975 and PR-AUC of 0.931, demonstrating that combining historical and real-time streams significantly outperforms single-source models. The predictions are served via a Streamlit doctor-facing dashboard that provides explainable risk scores and what-if simulations, enabling timely, preventative clinical interventions.
 
 ## 1. Team Details
-| Role | Name | Email | Phone |
-| :--- | :--- | :--- | :--- |
-| Team Leader | Shreyas M | mshreyas3213@gmail.com | +91 9618603169 |
-| Member | Ambati Hasanthi | hasanthi136@gmail.com | +91 63037 34007 |
-
-**College / Incubator:** Vasavi College of Engineering 
-**Team Name:** Has_Shrey
+- **Team Leader:** Shreyas M (mshreyas3213@gmail.com, +91 9618603169)
+- **Member:** Ambati Hasanthi (hasanthi136@gmail.com, +91 63037 34007)
+- **College / Incubator:** Vasavi College of Engineering 
+- **Team Name:** Has_Shrey
 
 ## 2. Links
-| Item | Link |
-| :--- | :--- |
-| Demo video (20+ min, unlisted YouTube) | **[INSERT YOUTUBE LINK HERE]** |
-| Presentation (PDF) | docs/presentation.pdf |
-| Architecture diagram (PDF) | docs/architecture.pdf |
+- **Demo video (20+ min, unlisted YouTube):** [INSERT YOUTUBE LINK HERE]
+- **Presentation (PDF):** docs/presentation.pdf
+- **Architecture diagram (PDF):** docs/architecture.pdf
 
 ## 3. Problem Statement and Healthcare Use Case
 India has one of the largest populations of people with Type 2 Diabetes; much of the care is reactive (patients act only after a high-glucose episode or hospital visit). Repeated glucose spikes drive long-term complications (heart, kidney, eyes, nerves) and avoidable hospital costs.
@@ -32,111 +27,70 @@ India has one of the largest populations of people with Type 2 Diabetes; much of
 ## 4. Solution Overview
 The prototype builds a virtual patient model that fuses two data streams:
 
-| Stream | Content | Source |
-| :--- | :--- | :--- |
-| **Static / historical (EHR)** | Age, sex, BMI, HbA1c, fasting glucose, LDL, eGFR, years since diabetes diagnosis, hypertension, medication (insulin / metformin), family history, synthetic genetic risk score | Synthetic (generate_data.py) |
-| **Dynamic / real-time** | Continuous glucose (CGM), heart rate, heart-rate variability (HRV), step count, sleep stages, logged meals; one reading every 15 min for 14 days | Synthetic (generate_data.py) |
+- **Static / historical (EHR):** Age, sex, BMI, HbA1c, fasting glucose, LDL, eGFR, years since diabetes diagnosis, hypertension, medication, family history, synthetic genetic risk score (Synthetic: generate_data.py)
+- **Dynamic / real-time:** Continuous glucose (CGM), heart rate, HRV, step count, sleep stages, logged meals; one reading every 15 min for 14 days (Synthetic: generate_data.py)
 
 **Predicted adverse event:** Glucose rising above 180 mg/dL at any time in the next 2 hours.
 
 A doctor-facing dashboard shows each virtual patient's live risk, glucose trend, an explanation of why the alert fired, and a what-if simulation.
 
 ## 5. Architecture
-```text
- Synthetic EHR  ─────────┐
- (static, per patient)   │
-                         ├─►  Feature engineering  ─►  LightGBM classifier  ─►  2-hour spike risk
- Synthetic wearables ────┘    (past data only:         (trained on unseen-        │
- (CGM, HR, HRV, steps,         lags, trends,            patient split)            ▼
-  sleep, meals)                rolling stats)                              Doctor dashboard
-                                                                           (Streamlit: risk gauge,
-                                                                            glucose chart, explanation,
-                                                                            what-if twin)
+Synthetic EHR (static) and Synthetic Wearables (CGM, HR, HRV, steps, sleep, meals) are fused into Feature Engineering (past data only: lags, trends, rolling stats). This feeds into a LightGBM Classifier (trained on unseen-patient split), which outputs a 2-hour spike risk to a Doctor Dashboard (Streamlit: risk gauge, glucose chart, explanation, what-if twin).
+
 Full diagram: docs/architecture.pdf
 
-
-
-## 6. Technical Stack
-
-
-, AI/ML Model and Framework
-* **Language:** Python 3
-* **Data:** pandas, numpy
-* **Model:** LightGBM gradient-boosted trees (binary classifier)
-* **Evaluation:** scikit-learn (ROC-AUC, PR-AUC, precision, recall)
-* **Dashboard:** Streamlit + Plotly
-* **Explainability:** LightGBM per-prediction feature contributions (shown in the dashboard)
+## 6. Technical Stack, AI/ML Model and Framework
+- **Language:** Python 3
+- **Data:** pandas, numpy
+- **Model:** LightGBM gradient-boosted trees (binary classifier)
+- **Evaluation:** scikit-learn (ROC-AUC, PR-AUC, precision, recall)
+- **Dashboard:** Streamlit + Plotly
+- **Explainability:** LightGBM per-prediction feature contributions
 
 **Key design choices:**
-* Features use only past data, so there is no leakage of future values.
-* Train / validation / test split is by patient (136 / 24 / 40 patients), so the model is tested on people it has never seen.
-* Ablation study proves the value of fusing the two streams.
+- Features use only past data, so there is no leakage of future values.
+- Train / validation / test split is by patient (136 / 24 / 40 patients).
+- Ablation study proves the value of fusing the two streams.
 
-**Results (on 40 unseen test patients)**
-
-| Model | ROC-AUC | PR-AUC |
-| :--- | :--- | :--- |
-| EHR only | 0.837 | 0.617 |
-| Wearables only | 0.970 | 0.923 |
-| Fused (EHR + wearables) | **0.975** | **0.931** |
+**Results (on 40 unseen test patients):**
+- EHR only: ROC-AUC 0.837 | PR-AUC 0.617
+- Wearables only: ROC-AUC 0.970 | PR-AUC 0.923
+- Fused (EHR + wearables): ROC-AUC 0.975 | PR-AUC 0.931
 
 At alert threshold 0.50: precision 0.87, recall 0.81. At threshold 0.30: recall rises to 0.89 with precision 0.78 (the threshold is adjustable in the dashboard).
 
-Charts: `outputs/feature_importance.png`, `outputs/roc_curve.png`
+Charts: outputs/feature_importance.png, outputs/roc_curve.png
 
 *Honest note: all data is synthetic and the spike behaviour comes from our simulator, so these scores demonstrate that the pipeline works end to end, not clinical accuracy. Validation on real, consented data would be required before any clinical use.*
 
-
-
 ## 7. How to Run
+1. Install dependencies: `pip install -r requirements.txt`
+2. (Optional) Regenerate the synthetic data and retrain the model:
+   - `python generate_data.py`
+   - `python train_model.py`
+3. Launch the doctor dashboard: `python -m streamlit run app.py`
 
-
-```bash
-# 1. Install dependencies
-pip install -r requirements.txt
-
-# 2. (Optional) regenerate the synthetic data and retrain the model
-python generate_data.py
-python train_model.py
-
-# 3. Launch the doctor dashboard
-python -m streamlit run app.py
-
+The repository already contains the generated data (data/), the trained model (models/) and outputs (outputs/), so step 3 works immediately.
 
 ## 8. Repository Structure
+- generate_data.py (synthetic data generator)
+- train_model.py (feature engineering, training, evaluation)
+- app.py (Streamlit doctor dashboard)
+- data/ (ehr.csv, wearables.csv)
+- models/ (model.pkl)
+- outputs/ (metrics, charts, predictions)
+- docs/ (presentation and architecture diagram)
+- requirements.txt
+- LICENSE
 
-
-```text
-├── generate_data.py     # synthetic EHR + wearable/CGM data generator
-├── train_model.py       # feature engineering, training, evaluation, ablation
-├── app.py              # Streamlit doctor dashboard
-├── data/                # ehr.csv, wearables.csv (synthetic)
-├── models/              # trained model (model.pkl)
-├── outputs/             # metrics, charts, predictions
-├── docs/                # presentation and architecture diagram (PDF)
-├── requirements.txt
-└── LICENSE
-##9. Data and Privacy
-
-
+## 9. Data and Privacy
 No real patient data is used. Both streams are fully synthetic, in line with the challenge's sandbox rules (DPDP Act / HIPAA considerations).
 
+## 10. Limitations and Future Scope
+- Replace synthetic data with open datasets (e.g. MIMIC-IV).
+- Extend to hypertension and cardiovascular-risk twins.
+- Personalised models per patient; real-time streaming from consumer wearables.
+- Clinical validation and integration with hospital EHR systems.
 
-
-##10. Limitations and Future Scope
-
-
-Replace synthetic data with open datasets (e.g. MIMIC-IV, public CGM datasets) and Synthea-generated records.
-
-Extend to hypertension and cardiovascular-risk twins.
-
-Personalised models per patient; real-time streaming from consumer wearables.
-
-Clinical validation and integration with hospital EHR systems.
-
-
-11. Open-Source License
-
-
+## 11. Open-Source License
 Released under the MIT License, see LICENSE.
-
