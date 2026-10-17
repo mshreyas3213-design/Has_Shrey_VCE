@@ -35,8 +35,9 @@ The prototype builds a virtual patient model that fuses two data streams:
 A doctor-facing dashboard shows each virtual patient's live risk, glucose trend, an explanation of why the alert fired, and a what-if simulation.
 
 ## 5. Architecture
+```text
 Synthetic EHR (static) and Synthetic Wearables (CGM, HR, HRV, steps, sleep, meals) are fused into Feature Engineering (past data only: lags, trends, rolling stats). This feeds into a LightGBM Classifier (trained on unseen-patient split), which outputs a 2-hour spike risk to a Doctor Dashboard (Streamlit: risk gauge, glucose chart, explanation, what-if twin).
-
+```
 Full diagram: docs/architecture.pdf
 
 ## 6. Technical Stack, AI/ML Model and Framework
