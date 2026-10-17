@@ -126,5 +126,3 @@ Clinical validation and integration with hospital EHR systems.
 11. Open-Source License
 Released under the MIT License, see LICENSE.
 
-
-You are ready to go!
