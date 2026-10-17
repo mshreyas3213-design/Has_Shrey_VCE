@@ -12,8 +12,8 @@ Diabetes care is predominantly reactive, with interventions often occurring only
 
 ## 2. Links
 - **Demo video (20+ min, unlisted YouTube):** [INSERT YOUTUBE LINK HERE]
-- **Presentation (PDF):** docs/presentation.pdf
-- **Architecture diagram (PDF):** docs/architecture.pdf
+- **Presentation (PDF):** presentation.pdf
+- **Architecture diagram (PDF):** architecture.pdf
 
 ## 3. Problem Statement and Healthcare Use Case
 India has one of the largest populations of people with Type 2 Diabetes; much of the care is reactive (patients act only after a high-glucose episode or hospital visit). Repeated glucose spikes drive long-term complications (heart, kidney, eyes, nerves) and avoidable hospital costs.
